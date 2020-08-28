@@ -4,11 +4,15 @@ import cv2
 import tensorflow as tf
 
 # Emotion Classifier
-# model = tf.keras.models.load_model("./fer_model_42.h5")
-model = tf.keras.models.load_model("./ck_model_81.h5")
+model_fer = tf.keras.models.load_model("./fer_model_42.h5")
+model_ck = tf.keras.models.load_model("./ck_model_81.h5")
 
 # Face Classifier
 classifier = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
+
+# Labels
+types_ck = ("Anger", "Disgust", "Fear", "Happy", "Sadness", "Surprise", "Contempt")
+types_fer = ("Fear", "Disgust", "Anger", "Happiness", "Sadness", "Surprise", "Neutral")
 
 capture = cv2.VideoCapture(0)
 
@@ -19,13 +23,12 @@ while True:
     if not capture:
         continue
 
-    # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces_detected = classifier.detectMultiScale(image, 1.32, 5)
 
     for (x,y,w,h) in faces_detected:
 
-        #cropping region of interest i.e. face area from  image
-        cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),thickness=7)
+        # cropping region of interest i.e. face area from image
+        cv2.rectangle(image, (x,y), (x+w,y+h), (255,0,0), thickness=7)
         roi=image[y:y+w,x:x+h]
         roi=cv2.resize(roi,(48, 48))
 
@@ -33,46 +36,45 @@ while True:
         img_pixels = np.expand_dims(img_pixels, axis = -1)
         img_pixels = img_pixels.reshape((-1, 48, 48, 1))
 
-        predictions = model.predict(img_pixels)
-        probs = model.predict_proba(img_pixels)
-
-        # CK_Correct Labels
-        types = ("Anger", "Disgust", "Fear", "Happy", "Sadness", "Surprise", "Contempt")
-
-        # FER_Correct Labels
-        # types = ("Fear", "Disgust", "Anger", "Happiness", "Sadness", "Surprise", "Neutral")
+        predictions_ck = model_ck.predict(img_pixels)
+        predictions_fer = model_fer.predict(img_pixels)
 
 
-        # find max indexed array
-        max_index = np.argmax(predictions[0])
-        predicted_emotion = types[max_index]
+        # Predictions on CK dataset
+        max_index_ck = np.argmax(predictions_ck[0])
+        predicted_emotion_ck = types_ck[max_index_ck]
 
-
-        # Partial predictions on CK+ dataset.
-        max_non_neutral = 0
-        max_non_neutral_idx = 0
-        for idx, each in enumerate(predictions[0]):
-            if each > 0 and idx != 2:
-                if each > max_non_neutral:
-                    max_non_neutral = each
-                    max_non_neutral_idx = idx
-                    print(types[max_non_neutral_idx] + ": "+ ("%.3f" % max_non_neutral) + " ")
+        # max_non_neutral = 0
+        # max_non_neutral_idx = 0
+        print("CK+:")
+        for idx, each in enumerate(predictions_ck[0]):
+            if each > 0:
+                # if each > max_non_neutral and (idx == 3 or idx == 5):
+                #     max_non_neutral = each
+                #     max_non_neutral_idx = idx
+                    print(types_ck[idx] + ": "+ ("%.3f" % each) + " ")
         print("\n")
 
 
-        # Partial predictions on FER+ dataset.
+
+        # Predictions on FER+ Dataset
+        max_index_fer = np.argmax(predictions_fer[0])
+        predicted_emotion_fer = types_fer[max_index_fer]
+
         # max_non_neutral = 0
         # max_non_neutral_idx = 0
-        # for idx, each in enumerate(predictions[0]):
-        #     if each > 0 and idx != 3:
-        #         if each > max_non_neutral:
-        #             max_non_neutral = each
-        #             max_non_neutral_idx = idx
-        #         print(types[max_non_neutral_idx] + ": "+ ("%.3f" % max_non_neutral) + " ")
-        # print("\n")
+        print("FER+:")
+        for idx, each in enumerate(predictions_fer[0]):
+            if each > 0:
+                # if each > max_non_neutral and idx != 0:
+                    # max_non_neutral = each
+                    # max_non_neutral_idx = idx
+                print(types_fer[idx] + ": "+ ("%.3f" % each) + " ")
+        print("\n")
 
 
-        cv2.putText(image, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(image, predicted_emotion_ck, (int(x), int(y + 20)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(image, predicted_emotion_fer, (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
 
 
     cv2.imshow("Image", image)
