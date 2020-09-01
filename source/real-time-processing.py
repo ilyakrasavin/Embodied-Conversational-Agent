@@ -4,8 +4,8 @@ import cv2
 import tensorflow as tf
 
 # Emotion Classifier
-model_fer = tf.keras.models.load_model("./fer_model_42.h5")
-model_ck = tf.keras.models.load_model("./ck_model_81.h5")
+model_fer = tf.keras.models.load_model("./fer_model_59.h5")
+model_ck = tf.keras.models.load_model("./ck_model_90.h5")
 
 # Face Classifier
 classifier = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
@@ -39,36 +39,24 @@ while True:
         predictions_ck = model_ck.predict(img_pixels)
         predictions_fer = model_fer.predict(img_pixels)
 
-
         # Predictions on CK dataset
         max_index_ck = np.argmax(predictions_ck[0])
         predicted_emotion_ck = types_ck[max_index_ck]
 
-        # max_non_neutral = 0
-        # max_non_neutral_idx = 0
         print("CK+:")
         for idx, each in enumerate(predictions_ck[0]):
             if each > 0:
-                # if each > max_non_neutral and (idx == 3 or idx == 5):
-                #     max_non_neutral = each
-                #     max_non_neutral_idx = idx
-                    print(types_ck[idx] + ": "+ ("%.3f" % each) + " ")
+                print(types_ck[idx] + ": "+ ("%.3f" % each) + " ")
         print("\n")
-
 
 
         # Predictions on FER+ Dataset
         max_index_fer = np.argmax(predictions_fer[0])
         predicted_emotion_fer = types_fer[max_index_fer]
 
-        # max_non_neutral = 0
-        # max_non_neutral_idx = 0
         print("FER+:")
         for idx, each in enumerate(predictions_fer[0]):
             if each > 0:
-                # if each > max_non_neutral and idx != 0:
-                    # max_non_neutral = each
-                    # max_non_neutral_idx = idx
                 print(types_fer[idx] + ": "+ ("%.3f" % each) + " ")
         print("\n")
 
