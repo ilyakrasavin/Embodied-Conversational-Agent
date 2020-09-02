@@ -47,7 +47,7 @@ classifier = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
 # Labels
 types_ck = ("Anger", "Disgust", "Fear", "Happy", "Sadness", "Surprise", "Contempt")
 types_fer = ("Fear", "Disgust", "Anger", "Happiness", "Sadness", "Surprise", "Neutral")
-
+print('hello')
 
 def realtime_video():
 
