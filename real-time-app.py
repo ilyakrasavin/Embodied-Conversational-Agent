@@ -145,6 +145,15 @@ def realtime_audio():
 
             pred_aud = model.predict(features)
             
+            prob_sum = pred_aud[0][0] + pred_aud[0][2] + pred_aud[0][3] + pred_aud[0][4] + pred_aud[0][5] + pred_aud[0][6] + pred_aud[0][7]  
+            x = (1)/(prob_sum)
+             
+            for j in range(8):
+                if j==1:
+                    pred_aud[0][j] = 0
+                else:  
+                    pred_aud[0][j] = (x)*(pred_aud[0][j])
+
             if pred_fer is not None:    
                 fused_pred(pred_aud,pred_fer)
             #print(pred_aud)
@@ -158,10 +167,12 @@ def realtime_audio():
 
 def fused_pred(pred_aud,pred_fer):
 
-    emotions_f = ['Neutral', 'Happy', 'Sad', 'Angry', 'Fearful', 'Disgust', 'Surprise', 'Calm']
-    pred_f = [None]*8
     global start_time_aud
     global start_time_vid
+
+    emotions_f = ['Neutral', 'Happy', 'Sad', 'Angry', 'Fearful', 'Disgust', 'Surprise', 'Calm']
+    pred_f = [None]*7
+    
     #print('pred_fer')
     #print(start_time_vid)
     #print(pred_fer[0][6])
@@ -172,6 +183,7 @@ def fused_pred(pred_aud,pred_fer):
     #print(start_time_vid)
     if start_time_vid is not None:
         if abs(start_time_vid-start_time_aud) <= 3:
+            print(pred_aud[0][0])
             pred_f[0] = pred_fer[0][6]*(0.4) + pred_aud[0][0]*(0.6)
             pred_f[1] = pred_fer[0][3]*(0.4) + pred_aud[0][2]*(0.6)
             pred_f[2] = pred_fer[0][4]*(0.4) + pred_aud[0][3]*(0.6)
@@ -179,7 +191,14 @@ def fused_pred(pred_aud,pred_fer):
             pred_f[4] = pred_fer[0][0]*(0.4) + pred_aud[0][5]*(0.6)
             pred_f[5] = pred_fer[0][1]*(0.4) + pred_aud[0][6]*(0.6)
             pred_f[6] = pred_fer[0][5]*(0.4) + pred_aud[0][7]*(0.6)
-            pred_f[7] = pred_aud[0][0]
+            #pred_f[7] = pred_aud[0][1]
+
+            for k in range(7):
+                pred_aud[0][k] = round(pred_aud[0][k],5)
+
+            for i in range(7):
+                pred_f[i] = round(pred_f[i],5)
+
 
             print(pred_f)
             pred_f_emo = emotions_f[np.argmax(pred_f)]
