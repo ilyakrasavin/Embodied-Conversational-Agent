@@ -1,7 +1,10 @@
+
+#read in the emotion variable predicted from the AI
 f = open( "emo.txt", O_RDONLY|O_CREAT )
 pred_f_emo = read(f, 50)
 print(pred_f_emo)
 
+#display set the corrisponding AUs based on each emotion
 if (pred_f_emo == 'Happy'):
     bml.execBML('*', '<face amount="1" au="6" end="1" side="BOTH" start="0" type="facs"/>') 
     bml.execBML('*', '<face amount="1" au="12" end="1" side="BOTH" start="0" type="facs"/>')
