@@ -3,6 +3,8 @@ import os
 import cv2
 import tensorflow as tf
 
+# This program takes input from your camera & attempts to recognize the facial expression.
+
 # Emotion Classifier
 model_fer = tf.keras.models.load_model("./fer_model_59.h5")
 model_ck = tf.keras.models.load_model("./ck_model_90.h5")
