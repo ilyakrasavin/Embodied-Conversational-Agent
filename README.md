@@ -1,13 +1,13 @@
 # Embodied-Conversational-Agent
 Affective Computing (CMPT 419 / 983) at Simon Fraser University.
 
-# About
+## About
 
 
-# Contents
+## Contents
 
 
-# Running
+## Running
 
 
-# Credits
+## Credits
