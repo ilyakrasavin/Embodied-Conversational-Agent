@@ -2,7 +2,7 @@
 Affective Computing (CMPT 419 / 983) at Simon Fraser University.
 
 ## About
-This base Module provides Affective Context Awareness for a simple Embodied Conversational Agent.<br>
+This base Module provides Affective Context Awareness for an early-stage Embodied Conversational Agent.<br>
 Microsoft FER2013 and Cohn-Kanade+ Datasets are used to train ConvNets in Keras, which are employed for Facial Emotion Recognition using OpenCV software.
 
 ## Contents
