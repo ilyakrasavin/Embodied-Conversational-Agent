@@ -3,7 +3,12 @@ Affective Computing (CMPT 419 / 983) at Simon Fraser University.
 
 ## About
 This base Module provides Affective Context Awareness for an early-stage Embodied Conversational Agent.<br>
-Microsoft FER2013 and Cohn-Kanade+ Datasets are used to train ConvNets in Keras, which are employed for Facial Emotion Recognition using OpenCV software.
+Outlines the design of Convolutional Neural Networks implemented and trained using Keras (Tensorflow2 Backend)<br>
+Datasets used are:
+1) Microsoft FER2013
+2) Cohn-Kanade+
+
+Trained models are employed in Real-Time Facial Emotion Recognition using OpenCV software.
 
 ## Contents
 
@@ -14,7 +19,7 @@ Video_Recognition.ipynb<br>
 - Main module: Datasets, ConvNets Training & Evaluation<br>
 
 video_testing.ipynb<br>
-- Testing Emotion Recognition on Videos. Includes a frame extraction script<br>
+- Testing Emotion Recognition on Videos (Includes a frame extraction script)<br>
 
 real_time_processing.py<br>
 - Real-Time Face Detection & Emotion Recognition using OpenCV<br>
@@ -29,12 +34,12 @@ haarcascade_frontalface_default.xml: HaarCascade Face Classifier<br>
 ## Running
 
 Modules mentioned above rely on the following packages:<br>
-> Pandas, Numpy, h5py, os, tensorflow, pydot, graphviz, matplotlib, PIL, seaborn, scikit-learn, io, cv2
+> pandas, numpy, h5py, os, tensorflow, pydot, graphviz, matplotlib, PIL, seaborn, scikit-learn, io, cv2
 
-Notebooks can be accessed by running jupyter-notebook locally from your terminal<br>
-Real-time script needs to be run the following way:
+See Notebooks on GitHub. Alternatively, download and run jupyter-notebook locally.
+
+To launch Real-Time Recognition, run the following in your terminal:
 > python3 real_time_processing.py
-
 
 ## Credits
 Ilia Krasavin (Facial Emotion Recognition - OpenCV, Keras, TF)<br>
